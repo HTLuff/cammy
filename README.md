@@ -1,9 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/HTLuff/cammy/blob/main/hero.png">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+    <img src="https://github.com/HTLuff/cammy/blob/main/hero.png" alt="Logo" width="80" height="80">
 
   <h3 align="center">Cammy</h3>
 

@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  step-functions-progress-tracking-app
+
+  SAM Template for step-functions-progress-tracking-app to demonstrate progress tracking of AWS Step Functions.
+  It implements Websocket API with management Lambda functions and DynamoDB, mock functions to emulate long
+  running tasks, and a state machine implementation.
+
+Globals:
+  Function:
+    Runtime: node16.x
+    MemorySize: 128
+    Timeout: 15
+
+Parameters:
+  ApiStageName:
+    Type: String
+    Default: Prod
+    Description: REQUIRED The name of Websocket API deployment stage
+    MinLength: 3
+    MaxLength: 10
+    AllowedPattern: ^[A-Za-z]+$
+    ConstraintDescription: Capital or small letters only.
+
+Resources:
+  - ${file(resources/lambda.yml)}
+  - ${file(resources/dynamoDb.yml)}
+  - ${file(resources/apiGateway.yml)}
+  - ${file(resources/stepFunction.yml)}
+
+Outputs:
+  WebSocketURL:
+    Description: "The WSS Protocol URL to connect to. Copy and paste to the field on the frontend."
+    Value:
+      !Join [
+        "",
+        [
+          "wss://",
+          !Ref ProgressTrackingWebsocket,
+          ".execute-api.",
+          !Ref "AWS::Region",
+          ".amazonaws.com/",
+          !Ref "ApiStageName",
+        ],
+      ]

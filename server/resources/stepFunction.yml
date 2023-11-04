@@ -1,0 +1,32 @@
+##### Ordering state machine #####
+OrderingStateMachine:
+  Type: AWS::Serverless::StateMachine
+  Properties:
+    DefinitionUri: statemachine.asl.json
+    DefinitionSubstitutions:
+      WebSocketApiEndpoint:
+        !Join [
+          ".",
+          [
+            !Ref ProgressTrackingWebsocket,
+            execute-api,
+            !Ref "AWS::Region",
+            amazonaws.com,
+          ],
+        ]
+      MockGenerateLabelFunctionArn: !GetAtt MockGenerateLabelFunction.Arn
+      ReportProgressFunctionArn: !GetAtt ReportProgressFunction.Arn
+    Type: STANDARD
+    Policies:
+      - Statement:
+          - Effect: Allow
+            Action:
+              - execute-api:Invoke
+              - execute-api:ManageConnections
+            Resource: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ProgressTrackingWebsocket}/*"
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource:
+              - !GetAtt ReportProgressFunction.Arn
+              - !GetAtt MockGenerateLabelFunction.Arn

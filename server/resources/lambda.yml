@@ -1,0 +1,113 @@
+##### Websocket management Lambda functions #####
+OnConnectFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    CodeUri: handlers/websocketHandlers/onConnect/
+    Handler: app.handler
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref ConnectionsTable
+    Policies:
+      - DynamoDBCrudPolicy:
+          TableName: !Ref ConnectionsTable
+OnConnectPermission:
+  Type: AWS::Lambda::Permission
+  DependsOn:
+    - ProgressTrackingWebsocket
+  Properties:
+    Action: lambda:InvokeFunction
+    FunctionName: !Ref OnConnectFunction
+    Principal: apigateway.amazonaws.com
+OnDisconnectFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    CodeUri: handlers/websocketHandlers/onDisconnect/
+    Handler: app.handler
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref ConnectionsTable
+    Policies:
+      - DynamoDBCrudPolicy:
+          TableName: !Ref ConnectionsTable
+OnDisconnectPermission:
+  Type: AWS::Lambda::Permission
+  DependsOn:
+    - ProgressTrackingWebsocket
+  Properties:
+    Action: lambda:InvokeFunction
+    FunctionName: !Ref OnDisconnectFunction
+    Principal: apigateway.amazonaws.com
+ReportProgressFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    CodeUri: handlers/websocketHandlers/reportProgress/
+    Handler: app.handler
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref ConnectionsTable
+        API_URL:
+          !Join [
+            "",
+            [
+              "https://",
+              !Ref ProgressTrackingWebsocket,
+              ".execute-api.",
+              !Ref "AWS::Region",
+              ".amazonaws.com/",
+              !Ref "ApiStageName",
+            ],
+          ]
+    Policies:
+      - DynamoDBCrudPolicy:
+          TableName: !Ref ConnectionsTable
+      - Statement:
+          - Effect: Allow
+            Action:
+              - "execute-api:ManageConnections"
+            Resource:
+              - !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ProgressTrackingWebsocket}/*"
+
+##### Entry function to trigger the state machine #####
+OnOrderFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    CodeUri: handlers/orderHandlers/onOrder
+    Handler: app.handler
+    Environment:
+      Variables:
+        STEP_FUNCTIONS_ARN: !GetAtt OrderingStateMachine.Arn
+    Policies:
+      - Statement:
+          - Effect: Allow
+            Action:
+              - states:StartExecution
+            Resource: !GetAtt OrderingStateMachine.Arn
+OnOrderPermission:
+  Type: AWS::Lambda::Permission
+  Properties:
+    Action: lambda:InvokeFunction
+    FunctionName: !Ref OnOrderFunction
+    Principal: apigateway.amazonaws.com
+    SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ProgressTrackingWebsocket}/*"
+
+##### Mock Lambda functions to emulate long processes #####
+MockGenerateLabelFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    CodeUri: handlers/orderHandlers/mockGenerateLabel
+    Handler: app.handler
+    Policies:
+      - Statement:
+          - Effect: Allow
+            Action:
+              - "execute-api:ManageConnections"
+            Resource:
+              - !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ProgressTrackingWebsocket}/*"
+MockGenerateLabelPermission:
+  Type: AWS::Lambda::Permission
+  DependsOn:
+    - ProgressTrackingWebsocket
+  Properties:
+    Action: lambda:InvokeFunction
+    FunctionName: !Ref MockGenerateLabelFunction
+    Principal: apigateway.amazonaws.com

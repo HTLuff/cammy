@@ -1,9 +1,13 @@
 {
   "devDependencies": {
-    "@types/node": "^20.8.10"
+    "@types/node": "^20.8.10",
+    "@types/uuid": "^9.0.6"
   },
   "dependencies": {
     "aws-sdk": "^2.1488.0",
     "uuid": "^9.0.1"
+  },
+  "scripts": {
+    "deploy": "sam build && sam deploy --profile personal --region eu-west-2 SAM_CLI_TELEMETRY=0"
   }
 }

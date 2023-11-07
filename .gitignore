@@ -1,3 +1,4 @@
 server/secrets.yml
+client/src/secrets.json
 node_modules
 server/node_modules

@@ -1,0 +1,16 @@
+{
+  "name": "ffmpeg",
+  "version": "1.0.0",
+  "description": "This repo was inspired by the implementation here: https://github.com/serverlesspub/ffmpeg-aws-lambda-layer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./build.sh",
+    "development-deploy": "export AWS_PROFILE=sandbox && npx serverless deploy --stage dev",
+    "staging-deploy": "npx serverless deploy --stage stag",
+    "production-deploy": "npx serverless deploy --stage prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

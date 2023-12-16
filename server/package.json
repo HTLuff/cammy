@@ -1,13 +1,18 @@
 {
-  "devDependencies": {
-    "@types/node": "^20.8.10",
-    "@types/uuid": "^9.0.6"
-  },
-  "dependencies": {
-    "aws-sdk": "^2.1488.0",
-    "uuid": "^9.0.1"
-  },
+  "name": "serverless-aws-step-functions-progress-tracking",
+  "version": "1.0.0",
+  "description": "step function orchestration for reactive progress updates using web sockets",
+  "main": "handler.js",
   "scripts": {
-    "deploy": "sam build && sam deploy --profile personal --region eu-west-2 SAM_CLI_TELEMETRY=0"
+    "deploy": "npx serverless deploy",
+    "deploy-ffmpeg-layers": "cd layers && cd ffmpeg && npm run build && npm run development-deploy"
+  },
+  "keywords": [],
+  "author": "HTLuff",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1510.0",
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-step-functions": "^3.17.0"
   }
 }

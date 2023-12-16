@@ -1,0 +1,23 @@
+service: cammy-layer-ffmpeg
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-2
+  runtime: nodejs16.x
+  versionFunctions: false
+  logRetentionInDays: 3
+
+layers:
+  ffmpeg:
+    path: layer
+    compatibleRuntimes:
+      - nodejs16.x
+
+resources:
+  Outputs:
+    FfmpegLayerExport:
+      Value:
+        Ref: FfmpegLambdaLayer
+      Export:
+        Name: FfmpegLambdaLayer

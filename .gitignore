@@ -2,3 +2,7 @@ server/secrets.yml
 client/src/secrets.json
 node_modules
 server/node_modules
+design.sketch
+# Layer directories
+server/layers/ffmpeg/layer/**
+server/layers/ffmpeg/.serverless

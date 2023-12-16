@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
+	import secrets from '../secrets.json';
 
 	const websocketUrl = writable<string | null>(null);
 
@@ -47,7 +48,7 @@
 	}
 
 	async function startWebSocket(url: string) {
-		const ws = new WebSocket(url);
+		const ws = new WebSocket(secrets.WSS);
 
 		ws.onmessage = (event) => {
 			progressMessages = [...progressMessages, event.data];

@@ -7,20 +7,20 @@ const apiGatewayManagementApi = new AWS.ApiGatewayManagementApi({
   endpoint: process.env.WEBSOCKET_API_ENDPOINT,
 });
 
-module.exports.onOrder = async (event) => {
+module.exports.onUpload = async (event) => {
   const connectionId = event.requestContext.connectionId;
 
   try {
-    // Perform any additional logic you need when 'onOrder' is triggered
-    console.log(`'onOrder' triggered for connection ${connectionId}`);
+    // Perform any additional logic you need when 'onUpload' is triggered
+    console.log(`'onUpload' triggered for connection ${connectionId}`);
 
     // Start the Step Functions state machine
     await startProgressStateMachine(connectionId);
 
     return { statusCode: 200, body: "Steps started." };
   } catch (error) {
-    console.error("Error handling onOrder:", error);
-    return { statusCode: 500, body: "Error handling onOrder." };
+    console.error("Error handling onUpload:", error);
+    return { statusCode: 500, body: "Error handling onUpload." };
   }
 };
 

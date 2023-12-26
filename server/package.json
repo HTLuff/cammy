@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1510.0",
+    "serverless-api-gateway-throttling": "^2.0.3",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-step-functions": "^3.17.0"
   }

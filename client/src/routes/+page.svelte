@@ -1,22 +1,26 @@
 <script>
-	import DragAndDrop from './DragAndDrop.svelte';
+  import App from "./App.svelte";
+  import Notifications from "svelte-notifications";
+  import "./styles.css";
 </script>
 
 <svelte:head>
-	<title>Cammy</title>
-	<meta name="description" content="Cammy demo app" />
+  <title>Cammy</title>
+  <meta name="description" content="Cammy demo app" />
 </svelte:head>
 
 <section>
-	<DragAndDrop />
+  <Notifications>
+    <App />
+  </Notifications>
 </section>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
+  section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 0.6;
+  }
 </style>

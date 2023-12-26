@@ -1,8 +1,13 @@
-server/secrets.yml
+# Design
+*.sketch
+# Client
 client/src/secrets.json
-node_modules
+client/node_modules
+client/.svelte-kit
+client/static
+client/build
+# Server
 server/node_modules
-design.sketch
-# Layer directories
+server/secrets.yml
 server/layers/ffmpeg/layer/**
 server/layers/ffmpeg/.serverless

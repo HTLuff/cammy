@@ -17,6 +17,7 @@ provider:
   stackName: ${self:provider.environment.CLOUDFORMATION_STACK}
   region: ${self:provider.environment.REGION}
   stage: ${self:provider.environment.DEPLOYMENT_STAGE}
+  timeout: 30
   environment:
     AWS_ACCOUNT_ID: ${self:custom.AWS_ACCOUNT_ID}
     CONNECTIONS_TABLE_NAME: ${self:custom.CONNECTIONS_TABLE_NAME}
@@ -51,50 +52,63 @@ package:
     - !secrets.yml
     - package.json
     - package-lock.json
+    - layers/**
 
 plugins:
   - serverless-step-functions
   - serverless-iam-roles-per-function
+  - serverless-api-gateway-throttling
 
 functions:
+  ffmpeg:
+    handler: ffmpeg.handler
+    events:
+      - http:
+        path: compress
+        method: POST
+        cors: true
+        throttling:
+          maxRequestsPerSecond: 1
+          maxConcurrentRequests: 2
+
   connectHandler:
-    handler: handler.connect
+    handler: websocket.connect
     events:
       - websocket:
           route: $connect
 
   disconnectHandler:
-    handler: handler.disconnect
+    handler: websocket.disconnect
     events:
       - websocket:
           route: $disconnect
 
   progressHandler:
-    handler: handler.progress
+    handler: websocket.progress
     events:
       - websocket:
           route: progress
 
-  onOrderHandler:
-    handler: handler.onOrder
+  onUploadHandler:
+    handler: websocket.onUpload
     events:
       - websocket:
-          route: onOrder
+          route: onUpload
 
   progressErrorHandler:
-    handler: handler.error
+    handler: websocket.error
 
 stepFunctions:
   stateMachines:
     progressStateMachine:
-      name: progressStateMachine
+      name: ${self:provider.environment.STATE_MACHINE_NAME}
       definition:
         Comment: "State machine for progress updates"
         StartAt: Report25
         States:
           Report25:
             Type: Task
-            Resource: arn:aws:lambda:${self:provider.region}:${self:provider.environment.AWS_ACCOUNT_ID}}:function:${self:service}-dev-progressHandler
+            Resource: arn:aws:lambda:${self:provider.region}:${self:provider.environment.AWS_ACCOUNT_ID}}:function:${self:service}-${self:provider.environment.DEPLOYMENT_STAGE}-progressHandler
             Parameters:
               connectionId.$: "$.connectionId"
               Message: "Video uploaded"

@@ -3,7 +3,7 @@
 <img src="hero.png" alt="Logo" width="200" height="200">
 
 [![Svelte](https://img.shields.io/badge/svelte-3.0.0-orange.svg)](https://svelte.dev/)
-[![TypeScript](https://img.shields.io/badge/typescript-4.2.4-blue.svg)](https://www.typescriptlang.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow.svg)](https://www.ecma-international.org/ecma-262/6.0/)
 [![AWS](https://img.shields.io/badge/aws-%F0%9F%9B%A0-orange)](https://aws.amazon.com/)
 [![FFmpeg](https://img.shields.io/badge/FFmpeg-4.4-blue.svg)](https://ffmpeg.org/)
 

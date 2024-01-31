@@ -1,6 +1,6 @@
 # Cammy
 
-<img src="hero.png" alt="Logo" width="200" height="200">
+<img src="logo.png" alt="Logo" width="200" height="200">
 
 [![Svelte](https://img.shields.io/badge/svelte-3.0.0-orange.svg)](https://svelte.dev/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow.svg)](https://www.ecma-international.org/ecma-262/6.0/)
